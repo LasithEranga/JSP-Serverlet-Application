@@ -56,7 +56,6 @@
                 edit = true;
                 category = expense.get(0).getCategory();
             }
-            System.out.println(edit);
             double totalExpected = 0;
             double totalActual = 0;
             double totalDifference = 0;
@@ -100,7 +99,6 @@
                             <option value="House" <%= category.equals("House") ? "selected" : "" %> >House</option>
                             <option value="Work" <%= category.equals("Work") ? "selected" : "" %> > Work</option>
                             <option value="Personal" <%= category.equals("Personal") ? "selected" : "" %>>Personal</option>
-
                         </select>
                     </div>
                 </div>
@@ -108,14 +106,14 @@
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="expected" class="col-3 col-form-label fw-semibold">Expected </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="expected" name="expected_amount" value="<%= edit ? expense.get(0).getExpectedAmount():""%>"/>
+                        <input type="text" class="form-control bg-transparent" id="expected" onchange="onChangeAmount()" name="expected_amount" value="<%= edit ? expense.get(0).getExpectedAmount():""%>"/>
                     </div>
                 </div>
 
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="actual" class="col-3 col-form-label fw-semibold">Actual</label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="actual"  name="actual_amount" value="<%= edit ? expense.get(0).getActualAmount():""%>"/>
+                        <input type="text" class="form-control bg-transparent" id="actual" onchange="onChangeAmount()"  name="actual_amount" value="<%= edit ? expense.get(0).getActualAmount():""%>"/>
                     </div>
                 </div>
 
@@ -123,7 +121,7 @@
                     <label for="difference" class="col-3 col-form-label fw-semibold" >Difference
                     </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="difference" name="difference" value="<%= edit ? expense.get(0).getDifference():"" %>" />
+                        <input type="text" class="form-control bg-transparent" id="difference" readonly="true" name="difference" value="<%= edit ? expense.get(0).getDifference():"" %>" />
                     </div>
                 </div>
 
@@ -150,10 +148,20 @@
                             Select Month
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">Action</a></li>
-                            <li><a class="dropdown-item">Another action</a></li>
-                            <li><a class="dropdown-item">Something else here</a></li>
-                            <li><a class="dropdown-item">Separated link</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=01">January</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=02">February</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=03">March</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=04">April</a></li>                            <li><a class="dropdown-item" href="/JSPServerlet/?month=04">April</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=05">May</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=06">June</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=07">July</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=08">August</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=09">September</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=10">October</a></li>                            <li><a class="dropdown-item" href="/JSPServerlet/?month=04">October</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=11">November</a></li>
+                            <li><a class="dropdown-item" href="/JSPServerlet/?month=12">December</a></li>
+
+
                         </ul>
                     </div>
                 </div>
@@ -359,11 +367,11 @@
                 </div>
                 <div class="col-12 d-flex text-end  py-1 ps-2 fw-bold">
                     <div class="py-1 ps-1 col-9 text-start pe-1">Total Actual Expense Amount</div>
-                    <div class="py-1 ps-1 col-3 text-end pe-1 border border-bottom-2  border-top-0 border-start-0 border-end-0">Rs: <%= String.format("%.2f", totalActual)%></div>
+                    <div class="py-1 ps-1 col-3 text-end pe-1 " style=" border-bottom: 1px solid black;">Rs: <%= String.format("%.2f", totalActual)%></div>
                 </div>
                 <div class="col-12 d-flex text-end py-1 ps-2 fw-bold">
                     <div class="py-1 ps-1 col-9 text-start pe-1">Total Difference Amount</div>
-                    <div class="py-1 ps-1 col-3 text-end pe-1" style="border: 0px solid black; border-style: double; border-bottom: 1px solid black; ">Rs: <%= String.format("%.2f", totalDifference)%></div>
+                    <div class="py-1 ps-1 col-3 text-end pe-1" style=" border-style:double; border-top: 1px;border-left: 1px;border-right: 1px; ">Rs: <%= String.format("%.2f", totalDifference)%></div>
                 </div>
             </div>
         </div>
@@ -374,5 +382,17 @@
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"
     ></script>
+    
+    <script>
+        const onChangeAmount = () => {
+            let expectedAmount = document.getElementById("expected").value
+            let actualAmount = document.getElementById("actual").value
+            
+            if(isFinite(expectedAmount) && isFinite(actualAmount)){
+                document.getElementById("difference").value = expectedAmount - actualAmount;
+            }
+
+        }
+    </script>
 </body>
 </html>

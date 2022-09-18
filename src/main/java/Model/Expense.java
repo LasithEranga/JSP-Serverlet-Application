@@ -19,8 +19,8 @@ import Database.Database;
  */
 public class Expense {
 
-    public Expense( String title, String description, double expected_amount, double actual_amount, double difference, String date, String category) {
-        
+    public Expense(String title, String description, double expected_amount, double actual_amount, double difference, String date, String category) {
+
         this.title = title;
         this.description = description;
         this.expected_amount = expected_amount;
@@ -50,13 +50,12 @@ public class Expense {
     private static final String DELETE_EXPENSE = "DELETE FROM `expense` WHERE id = ?";
 
     public static List<Expense> find(String month) {
-        
+
         List<Expense> expenses = new ArrayList<Expense>();
 
         try (Connection con = Database.getConnection()) {
             PreparedStatement findAll = con.prepareStatement(FIND_ALL_BY_MONTH);
-            findAll.setString(1, "2022-"+month+"-%");
-            System.out.println(findAll);
+            findAll.setString(1, "2022-" + month + "-%");
             ResultSet resultSet = findAll.executeQuery();
 
             while (resultSet.next()) {
@@ -79,9 +78,9 @@ public class Expense {
         return expenses;
 
     }
-    
+
     public static List<Expense> find(int id) {
-        
+
         List<Expense> expenses = new ArrayList<Expense>();
 
         try (Connection con = Database.getConnection()) {
@@ -146,14 +145,14 @@ public class Expense {
             updateExpense.setString(6, expense.getDate());
             updateExpense.setString(7, expense.getCategory());
             updateExpense.setInt(8, id);
-            
-            if(updateExpense.executeUpdate() > 0){
+
+            if (updateExpense.executeUpdate() > 0) {
                 return 1;
-            }else{
+            } else {
                 return 0;
 
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -164,13 +163,12 @@ public class Expense {
         try (Connection con = Database.getConnection()) {
             PreparedStatement removeExpense = con.prepareStatement(DELETE_EXPENSE);
             removeExpense.setInt(1, expense_id);
-            if(removeExpense.executeUpdate()>0){
+            if (removeExpense.executeUpdate() > 0) {
+                return 1;
+            } else {
                 return 1;
             }
-            else{
-                return 1;
-            }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

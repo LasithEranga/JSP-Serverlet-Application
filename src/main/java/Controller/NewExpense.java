@@ -45,8 +45,6 @@ public class NewExpense extends HttpServlet {
         
         Expense expense = new Expense(title, description, expected_amount, actual_amount, difference, date, category);
 
-        System.out.println(Expense.save(expense));
-        
         RequestDispatcher rd = request.getRequestDispatcher("ViewExpenses.jsp");
         List<Expense> expenses = Expense.find("09");
         request.setAttribute("expenses", expenses);

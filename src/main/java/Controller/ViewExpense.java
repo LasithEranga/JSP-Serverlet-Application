@@ -20,6 +20,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 /**
  *
@@ -33,12 +35,17 @@ public class ViewExpense extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("ViewExpenses.jsp");
-        
-        List<Expense> expenses = Expense.find("09");
+        String month = "01";
+        if(request.getParameter("month") != null){
+            month = request.getParameter("month");
+        }
+        List<Expense> expenses = Expense.find(month);
         request.setAttribute("expenses", expenses);
         rd.forward(request, response);
         
     }
+    
+    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
