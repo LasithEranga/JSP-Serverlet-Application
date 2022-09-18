@@ -61,7 +61,6 @@ public class Expense {
             while (resultSet.next()) {
                 Expense expense = new Expense();
                 expense.setId(resultSet.getInt("id"));
-                System.out.println(resultSet.getInt("id"));
                 expense.setTitle(resultSet.getString("title"));
                 expense.setDescription(resultSet.getString("description"));
                 expense.setExpectedAmount(resultSet.getDouble("expected_amount"));
@@ -91,7 +90,6 @@ public class Expense {
             while (resultSet.next()) {
                 Expense expense = new Expense();
                 expense.setId(resultSet.getInt("id"));
-                System.out.println(resultSet.getInt("id"));
                 expense.setTitle(resultSet.getString("title"));
                 expense.setDescription(resultSet.getString("description"));
                 expense.setExpectedAmount(resultSet.getDouble("expected_amount"));

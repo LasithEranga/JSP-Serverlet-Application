@@ -18,7 +18,8 @@
             src="https://kit.fontawesome.com/4f128951c5.js"
             crossorigin="anonymous"
         ></script>
-        <title>Document</title>
+        <link rel="icon" type="image/x-icon" href="./logo.svg">
+        <title>Expense Tracker</title>
         <style>
             .heading {
                 width: 60%;
