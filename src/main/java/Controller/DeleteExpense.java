@@ -5,7 +5,10 @@
  */
 package Controller;
 
+import Model.Expense;
 import java.io.IOException;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +33,12 @@ public class DeleteExpense extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            int id = Integer.valueOf(request.getParameter("expense_id"));
+            Expense.remove(id);
+            RequestDispatcher rd = request.getRequestDispatcher("ViewExpenses.jsp");
+            List<Expense> expenses = Expense.find("09");
+            request.setAttribute("expenses", expenses);
+            rd.forward(request, response);
        // processRequest(request, response);
     }
 

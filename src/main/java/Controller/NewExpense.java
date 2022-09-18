@@ -8,6 +8,8 @@ package Controller;
 import Model.Expense;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +46,11 @@ public class NewExpense extends HttpServlet {
         Expense expense = new Expense(title, description, expected_amount, actual_amount, difference, date, category);
 
         System.out.println(Expense.save(expense));
+        
+        RequestDispatcher rd = request.getRequestDispatcher("ViewExpenses.jsp");
+        List<Expense> expenses = Expense.find("09");
+        request.setAttribute("expenses", expenses);
+        rd.forward(request, response);
     }
 
 

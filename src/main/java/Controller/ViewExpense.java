@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Lasith
  */
-@WebServlet(name = "AddUser", urlPatterns = {"/"})
+@WebServlet(name = "ViewExpense", urlPatterns = {"/"})
 public class ViewExpense extends HttpServlet {
 
 
@@ -34,7 +34,7 @@ public class ViewExpense extends HttpServlet {
             throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("ViewExpenses.jsp");
         
-        List<Expense> expenses = Expense.find();
+        List<Expense> expenses = Expense.find("09");
         request.setAttribute("expenses", expenses);
         rd.forward(request, response);
         

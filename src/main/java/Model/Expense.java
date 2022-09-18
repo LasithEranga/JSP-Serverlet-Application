@@ -42,23 +42,26 @@ public class Expense {
     private String date;
     private String category;
 
-    private static final String FIND_ALL = "SELECT * FROM `expense`";
+    private static final String FIND_ALL_BY_MONTH = "SELECT * FROM `expense` WHERE date LIKE ?;";
     private static final String SEARCH_EXPENSE = "SELECT * FROM `expense` WHERE title LIKE ?";
     private static final String UPDATE_EXPENSE = "UPDATE `expense` SET `title`= ? ,`description`= ?,`expected_amount`= ?,`actual_amount`= ?,`difference`= ?,`date`= ?,`category`= ? WHERE ir= ?";
     private static final String INSERT_EXPENSE = "INSERT INTO `expense` VALUES (?,?,?,?,?,?,?,?)";
-    private static final String DELETE_EXPENSE = "DELETE FROM `expense` WHERE expense_id = ?";
+    private static final String DELETE_EXPENSE = "DELETE FROM `expense` WHERE id = ?";
 
-    public static List<Expense> find() {
+    public static List<Expense> find(String month) {
         
         List<Expense> expenses = new ArrayList<Expense>();
 
         try (Connection con = Database.getConnection()) {
-            PreparedStatement findAll = con.prepareStatement(FIND_ALL);
+            PreparedStatement findAll = con.prepareStatement(FIND_ALL_BY_MONTH);
+            findAll.setString(1, "2022-"+month+"-%");
+            System.out.println(findAll);
             ResultSet resultSet = findAll.executeQuery();
 
             while (resultSet.next()) {
                 Expense expense = new Expense();
                 expense.setId(resultSet.getInt("id"));
+                System.out.println(resultSet.getInt("id"));
                 expense.setTitle(resultSet.getString("title"));
                 expense.setDescription(resultSet.getString("description"));
                 expense.setExpectedAmount(resultSet.getDouble("expected_amount"));
@@ -72,35 +75,6 @@ public class Expense {
             e.printStackTrace();
         }
 
-        return expenses;
-
-    }
-
-    public static List<Expense> find(String title) {
-        
-        List<Expense> expenses = new ArrayList<Expense>();
-
-        try (Connection con = Database.getConnection()) {
-            PreparedStatement findAll = con.prepareStatement(SEARCH_EXPENSE);
-            findAll.setString(1, "%" + title.replace("\"", "") + "%");
-            System.out.println(findAll);
-            ResultSet resultSet = findAll.executeQuery();
-            Expense expense = new Expense();
-            while (resultSet.next()) {
-                expense.setId(resultSet.getInt("id"));
-                expense.setTitle(resultSet.getString("title"));
-                expense.setDescription(resultSet.getString("description"));
-                expense.setExpectedAmount(resultSet.getDouble("expected_amount"));
-                expense.setActualAmount(resultSet.getDouble("actual_amount"));
-                expense.setDifference(resultSet.getDouble("difference"));
-                expense.setDate(resultSet.getString("date"));
-                expense.setCategory(resultSet.getString("category"));
-                expenses.add(expense);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
         return expenses;
 
     }
