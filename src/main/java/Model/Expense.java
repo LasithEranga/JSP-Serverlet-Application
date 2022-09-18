@@ -43,8 +43,9 @@ public class Expense {
     private String category;
 
     private static final String FIND_ALL_BY_MONTH = "SELECT * FROM `expense` WHERE date LIKE ?;";
+    private static final String FIND_ONE = "SELECT * FROM `expense` WHERE id = ?;";
     private static final String SEARCH_EXPENSE = "SELECT * FROM `expense` WHERE title LIKE ?";
-    private static final String UPDATE_EXPENSE = "UPDATE `expense` SET `title`= ? ,`description`= ?,`expected_amount`= ?,`actual_amount`= ?,`difference`= ?,`date`= ?,`category`= ? WHERE ir= ?";
+    private static final String UPDATE_EXPENSE = "UPDATE `expense` SET `title`= ? ,`description`= ?,`expected_amount`= ?,`actual_amount`= ?,`difference`= ?,`date`= ?,`category`= ? WHERE id= ?";
     private static final String INSERT_EXPENSE = "INSERT INTO `expense` VALUES (?,?,?,?,?,?,?,?)";
     private static final String DELETE_EXPENSE = "DELETE FROM `expense` WHERE id = ?";
 
@@ -57,6 +58,36 @@ public class Expense {
             findAll.setString(1, "2022-"+month+"-%");
             System.out.println(findAll);
             ResultSet resultSet = findAll.executeQuery();
+
+            while (resultSet.next()) {
+                Expense expense = new Expense();
+                expense.setId(resultSet.getInt("id"));
+                System.out.println(resultSet.getInt("id"));
+                expense.setTitle(resultSet.getString("title"));
+                expense.setDescription(resultSet.getString("description"));
+                expense.setExpectedAmount(resultSet.getDouble("expected_amount"));
+                expense.setActualAmount(resultSet.getDouble("actual_amount"));
+                expense.setDifference(resultSet.getDouble("difference"));
+                expense.setDate(resultSet.getString("date"));
+                expense.setCategory(resultSet.getString("category"));
+                expenses.add(expense);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return expenses;
+
+    }
+    
+    public static List<Expense> find(int id) {
+        
+        List<Expense> expenses = new ArrayList<Expense>();
+
+        try (Connection con = Database.getConnection()) {
+            PreparedStatement findOne = con.prepareStatement(FIND_ONE);
+            findOne.setInt(1, id);
+            ResultSet resultSet = findOne.executeQuery();
 
             while (resultSet.next()) {
                 Expense expense = new Expense();
@@ -113,8 +144,8 @@ public class Expense {
             updateExpense.setDouble(4, expense.getActualAmount());
             updateExpense.setDouble(5, expense.getDifference());
             updateExpense.setString(6, expense.getDate());
-            updateExpense.setString(6, expense.getCategory());
-            updateExpense.setInt(7, id);
+            updateExpense.setString(7, expense.getCategory());
+            updateExpense.setInt(8, id);
             
             if(updateExpense.executeUpdate() > 0){
                 return 1;

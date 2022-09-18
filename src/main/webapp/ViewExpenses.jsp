@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@page import="Model.Expense"%>
 <%@page import="java.util.ArrayList"%>
 <!DOCTYPE html>
@@ -44,7 +45,18 @@
     </head>
     <body class="bg-light mt-3 d-flex justify-content-center mb-5" style="overflow-y: hidden">
         <%
+            //all expenses 
             ArrayList<Expense> expenses = (ArrayList<Expense>) request.getAttribute("expenses");
+            //one expense for editing
+            List<Expense> expense = new ArrayList();
+            expense = (ArrayList<Expense>) request.getAttribute("expense");
+            boolean edit = false;
+            String category = "";
+            if(expense != null){
+                edit = true;
+                category = expense.get(0).getCategory();
+            }
+            System.out.println(edit);
             double totalExpected = 0;
             double totalActual = 0;
             double totalDifference = 0;
@@ -53,7 +65,8 @@
 
 
         <div class="col-4 px-3">
-            <form action="/JSPServerlet/new" method="POST" id="form">
+            <form action="/JSPServerlet/<%= edit ? "edit" : "new" %>" method="POST" id="form">
+                <input type="text" name="id" hidden value="<%= edit ? expense.get(0).getId():"" %>"/>
                 <div>
                     <span class="fs-1 fw-semibold p-0">New Expense</span>
                 </div>
@@ -61,7 +74,7 @@
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="title" class="col-3 col-form-label fw-semibold"> Title </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="title" name="title"/>
+                        <input type="text" class="form-control bg-transparent" id="title" name="title" value="<%= edit ? expense.get(0).getTitle():"" %>" />
                     </div>
                 </div>
 
@@ -69,14 +82,14 @@
                     <label for="description" class="col-3 col-form-label fw-semibold">Description
                     </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="description" name="description"/>
+                        <input type="text" class="form-control bg-transparent" id="description" name="description" value="<%= edit ? expense.get(0).getDescription():""%>"/>
                     </div>
                 </div>
 
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="date" class="col-3 col-form-label fw-semibold">Date</label>
                     <div class="col-9">
-                        <input type="date" class="form-control bg-transparent" id="date" name="date"/>
+                        <input type="date" class="form-control bg-transparent" id="date" name="date" value="<%= edit ? expense.get(0).getDate():""%>"/>
                     </div>
                 </div>
 
@@ -84,9 +97,9 @@
                     <label for="date" class="col-3 col-form-label fw-semibold">Category</label>
                     <div class="col-9">
                         <select class="form-control bg-transparent" name="category">
-                            <option value="House">House</option>
-                            <option value="House">Work</option>
-                            <option value="House">Personal</option>
+                            <option value="House" <%= category.equals("House") ? "selected" : "" %> >House</option>
+                            <option value="Work" <%= category.equals("Work") ? "selected" : "" %> > Work</option>
+                            <option value="Personal" <%= category.equals("Personal") ? "selected" : "" %>>Personal</option>
 
                         </select>
                     </div>
@@ -95,14 +108,14 @@
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="expected" class="col-3 col-form-label fw-semibold">Expected </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="expected" name="expected_amount" />
+                        <input type="text" class="form-control bg-transparent" id="expected" name="expected_amount" value="<%= edit ? expense.get(0).getExpectedAmount():""%>"/>
                     </div>
                 </div>
 
                 <div class="mb-2 row pt-3 ps-4">
                     <label for="actual" class="col-3 col-form-label fw-semibold">Actual</label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="actual"  name="actual_amount"/>
+                        <input type="text" class="form-control bg-transparent" id="actual"  name="actual_amount" value="<%= edit ? expense.get(0).getActualAmount():""%>"/>
                     </div>
                 </div>
 
@@ -110,13 +123,13 @@
                     <label for="difference" class="col-3 col-form-label fw-semibold" >Difference
                     </label>
                     <div class="col-9">
-                        <input type="text" class="form-control bg-transparent" id="difference" name="difference" />
+                        <input type="text" class="form-control bg-transparent" id="difference" name="difference" value="<%= edit ? expense.get(0).getDifference():"" %>" />
                     </div>
                 </div>
 
                 <div class="mt-5 d-flex justify-content-end">
                     <input type="reset" value="Clear"  class="btn btn-secondary me-3 px-4" />
-                    <input type="submit" value="Save" id="btnSubmit" class="btn btn-primary px-4" />
+                    <input type="submit" value="<%= edit ? "Update" : "Save" %>" id="btnSubmit" class="btn btn-primary px-4" />
                 </div>
             </form>
         </div>
